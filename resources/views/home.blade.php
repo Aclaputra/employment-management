@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<!-- react app disini -->
+<div class="container" id="employeeapp">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
