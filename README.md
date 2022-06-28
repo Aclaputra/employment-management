@@ -76,5 +76,59 @@ class Employee extends Model
     ];
 }
 ```
+DatabaseSeeder.pho :
+```
+class DatabaseSeeder extends Seeder
+{
+    /**
+     * Seed the application's database.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        $this->call(EmployeeSeeder::class);
+    }
+}
+```
+migrate the seeder :
+```
+php artisan migrate --seed
+```
+make Employee Controller :
+```
+php artisan make:controller EmployeesController
+```
+web.php :
+```
+Route::get('/get/employee/list', 
+    [EmployeesController::class, 'getEmployeeList']
+)->name('employee.list');
+```
+EmployeesController :
+```
+use Illuminate\Http\Request;
+use Log;
+use Exception;
+use App\Models\Employee;
+
+class EmployeesController extends Controller
+{
+    // Get Employee List from database.
+
+    public function getEmployeeList() {
+        try {
+            $employees = Employee::all();
+            return response()->json($employees);
+        }
+        catch(Exception $e) {
+            Log::error($e);
+        }
+    }
+}
+```
+Check if the axios api working :
+
+![](./img/api1.png)
 
 <!-- referenaces: (45:23/2:28:56) https://www.youtube.com/watch?v=svziC8BblM0&t=1255s&ab_channel=ZarxBiz-->
