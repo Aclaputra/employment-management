@@ -131,4 +131,22 @@ Check if the axios api working :
 
 ![](./img/api1.png)
 
+Change to order by id descending :
+```
+    public function getEmployeeList() {
+        try {
+            $employees = Employee::orderBy('id', 'DESC')->get();
+            return response()->json($employees);
+        }
+        catch(Exception $e) {
+            Log::error($e);
+        }
+    }
+}
+```
+
+now API Descended by Id :
+
+![](./img/api2.png)
+
 <!-- referenaces: (45:23/2:28:56) https://www.youtube.com/watch?v=svziC8BblM0&t=1255s&ab_channel=ZarxBiz-->
