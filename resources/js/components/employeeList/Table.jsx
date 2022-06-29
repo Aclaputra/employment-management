@@ -1,6 +1,33 @@
 import React, { Component } from 'react'
+import TableRow from './TableRow';
 
 class Table extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            employees: []
+        }
+    }
+
+    // Life cycle method
+    componentDidMount() {
+        // getEmployeeList require DOM nodes 
+        this.getEmployeeList();
+    }
+
+    // Get Employee List.
+    getEmployeeList = () => {
+        let self = this;
+        axios.get('/get/employee/list').then(function(response) {
+            // console.log(response.data);
+            self.setState({
+                employees: response.data
+            });
+        });
+    }
+
     render() {
         return (
             <div className="col-md-8 m-4">
@@ -17,12 +44,9 @@ class Table extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                            </tr>
+                            {this.state.employees.map(function(x, i) {
+                                return <TableRow key={i} data={x} />
+                            })}
                         </tbody>
                     </table>               
                 </div>
