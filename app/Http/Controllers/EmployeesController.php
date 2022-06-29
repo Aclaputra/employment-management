@@ -20,4 +20,17 @@ class EmployeesController extends Controller
             Log::error($e);
         }
     }
+
+    /**
+     * Get Individual employee details.
+     */
+    public function getEmployeeDetails(Request $request) {
+        try {
+            $employeeData = Employee::findOrFail($request->get('employeeId'));
+            return response()->json($employeeData);
+        }
+        catch(Exception $e) {
+            Log::error($e);
+        }
+    }
 }
