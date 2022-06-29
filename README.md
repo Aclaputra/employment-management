@@ -230,5 +230,171 @@ class Table extends Component {
     }
 }
 ```
+create TableActionsButtons.jsx :
+```
+import React, { Component } from 'react'
+import ViewModal from '../modals/ViewModal'
+
+export default class TableActionButtons extends Component {
+
+  constructor(props) {
+    super(props);
+  }
+
+  // Getting Individual employee data.
+
+  getEmployeeDetails = (id) => {
+    axios.post('/get/individual/employee/details', {
+      employeeId: id
+    }).then((response) => {
+      console.log(response.data);
+    })
+  } 
+
+  render() {
+    return (
+      <div className="btn-group" role="group">
+        <button 
+          className="btn btn-primary" 
+          type="button"
+          data-bs-toggle="modal" 
+          data-bs-target="#exampleModal"
+          onClick={ () => {this.getEmployeeDetails(this.props.eachRowId)}}
+        >
+          View
+        </button>
+        <ViewModal modalId={ this.props.eachRowId }/>
+
+      </div>
+    )
+  }
+}
+
+```
+add new function in EmployeesController.php for details:
+```
+    /**
+     * Get Individual employee details.
+     */
+    public function getEmployeeDetails(Request $request) {
+        try {
+            $employeeData = Employee::findOrFail($request->get('employeeId'));
+            return response()->json($employeeData);
+        }
+        catch(Exception $e) {
+            Log::error($e);
+        }
+    }
+```
+api output after clicking view button it will get by id:
+
+![](./img/api3.png)
+
+in TableActionButtons.jsx :
+
+```
+import ViewModal from '../modals/ViewModal'
+
+export default class TableActionButtons extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      currentEmployeeName: null,
+      currentEmployeeSalary: null
+    }
+  }
+
+  // Getting Individual employee data.
+
+  getEmployeeDetails = (id) => {
+    axios.post('/get/individual/employee/details', {
+      employeeId: id
+    }).then((response) => {
+      this.setState({
+        currentEmployeeName: response.data.employee_name,
+        currentEmployeeSalary: response.data.salary
+      })
+      console.log(response.data);
+    })
+  } 
+
+  render() {
+    return (
+      <div className="btn-group" role="group">
+        <button 
+          className="btn btn-primary" 
+          type="button"
+          data-bs-toggle="modal" 
+          data-bs-target={"#viewModal" + this.props.eachRowId}
+          onClick={ () => {this.getEmployeeDetails(this.props.eachRowId)} }
+        >
+          View
+        </button>
+        <ViewModal modalId={ this.props.eachRowId } employeeData={ this.state }/>
+
+        <button 
+          className="btn btn-info" 
+          type="button"
+          data-bs-toggle="modal" 
+          data-bs-target="#updateModal"
+        >
+          Update
+        </button>
+
+        <button 
+          className="btn btn-danger" 
+          type="button"
+          data-bs-toggle="modal" 
+          data-bs-target="#deleteModal"
+        >
+          Delete
+        </button>
+
+      </div>
+    )
+  }
+}
+```
+ViewModel.jsx :
+```
+export default class ViewModal extends Component {
+
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <div className="modal fade" id={"viewModal" + this.props.modalId} tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="exampleModalLabel">Modal title</h5>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div className="modal-body">
+                                Name: <strong>{this.props.employeeData.currentEmployeeName}</strong>
+                                <hr />
+                                Salary: <strong>{this.props.employeeData.currentEmployeeSalary}</strong>
+                            </div>
+                            <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" className="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+}
+```
+
+output after fetch the data :
+
+![](./img/api4.png)
+
+
 
 <!-- referenaces: (45:23/2:28:56) https://www.youtube.com/watch?v=svziC8BblM0&t=1255s&ab_channel=ZarxBiz-->
