@@ -5926,6 +5926,10 @@ var UpdateModal = /*#__PURE__*/function (_Component) {
         })
       });
     }
+  }], [{
+    key: "getDrivedStateFromProps",
+    value: function getDrivedStateFromProps(props, current_state) {} // update submit handler
+
   }]);
 
   return UpdateModal;

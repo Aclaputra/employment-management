@@ -24,6 +24,10 @@ export default class UpdateModal extends Component {
         });
     }
 
+    static getDrivedStateFromProps(props, current_state) {
+
+    }
+    
     // update submit handler
     updateEmployeeData = () => {
 
