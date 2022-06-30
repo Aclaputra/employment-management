@@ -395,6 +395,139 @@ output after fetch the data :
 
 ![](./img/api4.png)
 
+create New Button for Update modal :
+```
+import UpdateModal from '../modals/UpdateModal';
 
+export default class TableActionButtons extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      currentEmployeeName: null,
+      currentEmployeeSalary: null
+    }
+  }
+
+  // Getting Individual employee data.
+
+  getEmployeeDetails = (id) => {
+    axios.post('/get/individual/employee/details', {
+      employeeId: id
+    }).then((response) => {
+      this.setState({
+        currentEmployeeName: response.data.employee_name,
+        currentEmployeeSalary: response.data.salary
+      })
+      console.log(response.data);
+    })
+  } 
+
+  render() {
+    return (
+      <div className="btn-group" role="group">
+        <button 
+          className="btn btn-primary" 
+          type="button"
+          data-bs-toggle="modal" 
+          data-bs-target={"#viewModal" + this.props.eachRowId}
+          onClick={ () => {this.getEmployeeDetails(this.props.eachRowId)} }
+        >
+          View
+        </button>
+        <ViewModal modalId={ this.props.eachRowId } employeeData={ this.state }/>
+
+        <button 
+          className="btn btn-info" 
+          type="button"
+          data-bs-toggle="modal" 
+          data-bs-target={"#updateModal" + this.props.eachRowId}
+          onClick={ () => {this.getEmployeeDetails(this.props.eachRowId)} }
+        >
+          Update
+        </button>
+        <UpdateModal modalId={ this.props.eachRowId } employeeData={ this.state }/>
+```
+create New UpdateModal.jsx file :
+```
+import React, { Component } from 'react'
+
+export default class UpdateModal extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            employeeName: null,
+            employeeSalary: null
+        }
+    }
+
+    // Updating employee name state
+    inputEmployeeName = (event) => {
+        this.setState({
+            employeeName: event.target.value,
+        });
+    }
+    // Updating employee salary state.
+    inputEmployeeSalary = (event) => {
+        this.setState({
+            employeeSalary: event.target.value,
+        });
+    }
+
+    // update submit handler
+    updateEmployeeData = () => {
+
+    }
+
+    render() {
+        return (
+            <div className="modal fade" id={"updateModal" + this.props.modalId} tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="exampleModalLabel">Employee Details</h5>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div className="modal-body">
+                                <form className='form'>
+                                    <div className="form-group">
+                                        <input type="text" 
+                                            id="employeeName" 
+                                            value={this.state.employeeName ?? ""}
+                                            onChange={this.inputEmployeeName}
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <input type="text" 
+                                            id="employeeSalary" 
+                                            value={this.state.employeeSalary ?? ""}
+                                            onChange={this.inputEmployeeSalary}
+                                        />
+                                    </div>
+                                </form>
+                            </div>
+                            <div className="modal-footer">
+                            <input type="submit" 
+                                value="Update"
+                                onClick={this.updateEmployeeData}
+                            />
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" className="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+}
+
+```
+
+output modal after clicked the update button:
+
+![](./img/api5.png)
 
 <!-- referenaces: (45:23/2:28:56) https://www.youtube.com/watch?v=svziC8BblM0&t=1255s&ab_channel=ZarxBiz-->
