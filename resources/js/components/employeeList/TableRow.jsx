@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import TableActionButtons from './TableActionButtons';
 
 export default class TableRow extends Component {
 
@@ -12,7 +13,9 @@ export default class TableRow extends Component {
                 <th scope="row">{this.props.data.id}</th>
                 <td>{this.props.data.employee_name}</td>
                 <td>{this.props.data.salary}</td>
-                <td>@mdo</td>
+                <td>
+                    <TableActionButtons eachRowId={this.props.data.id} />
+                </td>
             </tr>
         )
     }
