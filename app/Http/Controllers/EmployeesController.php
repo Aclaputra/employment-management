@@ -33,4 +33,18 @@ class EmployeesController extends Controller
             Log::error($e);
         }
     }
+
+    /**
+     * Update Individual employee data.
+     */
+    public function updateEmployeeData(Request $request) {
+        try {
+            dd($request->all());
+            $employeeData = Employee::findOrFail($request->get('employeeId'));
+            return response()->json($employeeData);
+        }
+        catch(Exception $e) {
+            Log::error($e);
+        }
+    }
 }
