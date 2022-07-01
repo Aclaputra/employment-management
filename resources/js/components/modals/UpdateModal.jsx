@@ -88,6 +88,7 @@ export default class UpdateModal extends Component {
                                     <div className="form-group">
                                         <input type="text" 
                                             id="employeeName" 
+                                            className='form-control mb-3'
                                             value={this.state.employeeName ?? ""}
                                             onChange={this.inputEmployeeName}
                                         />
@@ -95,6 +96,7 @@ export default class UpdateModal extends Component {
                                     <div className="form-group">
                                         <input type="text" 
                                             id="employeeSalary" 
+                                            className='form-control mb-3'
                                             value={this.state.employeeSalary ?? ""}
                                             onChange={this.inputEmployeeSalary}
                                         />
