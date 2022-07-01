@@ -30,3 +30,7 @@ Route::get('/get/employee/list',
 Route::post('/get/individual/employee/details',
     [EmployeesController::class, 'getEmployeeDetails']
 )->name('employee.details');
+
+Route::post('/update/employee/data', 
+    [EmployeesController::class, 'updateEmployeeData']
+);
