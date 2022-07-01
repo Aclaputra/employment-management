@@ -619,6 +619,26 @@ fix bug after double clicking the update button :
 
 now we can edit the input.
 
+add dd($request->all()); to EmployeeController.php :
+```
+    /**
+     * Update Individual employee data.
+     */
+    public function updateEmployeeData(Request $request) {
+        try {
+            dd($request->all());
+            $employeeData = Employee::findOrFail($request->get('employeeId'));
+            return response()->json($employeeData);
+        }
+        catch(Exception $e) {
+            Log::error($e);
+        }
+    }
+```
+output after clicking the save changes button (it will get the updated input data):
+
+![](./img/api7.png)
+
 
 
 <!-- referenaces: (45:23/2:28:56) https://www.youtube.com/watch?v=svziC8BblM0&t=1255s&ab_channel=ZarxBiz-->
