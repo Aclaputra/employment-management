@@ -530,4 +530,95 @@ output modal after clicked the update button:
 
 ![](./img/api5.png)
 
+```
+export default class UpdateModal extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            employeeName: null,
+            employeeSalary: null
+        }
+    }
+
+    // Updating employee name state
+    inputEmployeeName = (event) => {
+        this.setState({
+            employeeName: event.target.value,
+        });
+    }
+    // Updating employee salary state.
+    inputEmployeeSalary = (event) => {
+        this.setState({
+            employeeSalary: event.target.value,
+        });
+    }
+
+    static getDerivedStateFromProps(props, current_state) {
+        let employeeUpdate = {
+            employeeName: null,
+            employeeSalary: null,
+        }
+
+        if(current_state.employeeName !== props.employeeData.currentEmployeeName) {
+            employeeUpdate.employeeName = props.employeeData.currentEmployeeName;
+        }
+
+        if(current_state.employeeSalary !== props.employeeData.currentEmployeeSalary) {
+            employeeUpdate.employeeSalary = props.employeeData.currentEmployeeSalary;
+        }
+
+        return employeeUpdate;
+    }
+```
+display update data :
+
+![](./img/api6.png)
+
+modified getDerivedStateFromProps in UpdateModal.jsx :
+```
+    static getDerivedStateFromProps(props, current_state) {
+        let employeeUpdate = {
+            employeeName: null,
+            employeeSalary: null,
+        }
+
+        // Updating data from input.
+        if(current_state.employeeName && (current_state.employeeName !== props.employeeData.currentEmployeeName)) {
+            return null;
+        }
+
+        // Updating data from props Below.
+        if(current_state.employeeName !== props.employeeData.currentEmployeeName) {
+            employeeUpdate.employeeName = props.employeeData.currentEmployeeName;
+        }
+
+        if(current_state.employeeSalary !== props.employeeData.currentEmployeeSalary) {
+            employeeUpdate.employeeSalary = props.employeeData.currentEmployeeSalary;
+        }
+
+        return employeeUpdate;
+    }
+```
+fix bug after double clicking the update button :
+```
+        // Updating data from props Below.
+        if(current_state.employeeName !== props.employeeData.currentEmployeeName || 
+            current_state.employeeName === props.employeeData.currentEmployeeName) {
+            employeeUpdate.employeeName = props.employeeData.currentEmployeeName;
+        }
+
+        if(current_state.employeeSalary !== props.employeeData.currentEmployeeSalary || 
+            current_state.employeeSalary === props.employeeData.currentEmployeeSalary) {
+            employeeUpdate.employeeSalary = props.employeeData.currentEmployeeSalary;
+        }
+
+        return employeeUpdate;
+```
+
+now we can edit the input.
+
+
+
 <!-- referenaces: (45:23/2:28:56) https://www.youtube.com/watch?v=svziC8BblM0&t=1255s&ab_channel=ZarxBiz-->
