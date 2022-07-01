@@ -845,7 +845,183 @@ after yes button clicked it will be showing react toast then automaticaly reload
 
 ![](./img/api10.png)
 
-output create data :
+add store route for creating new data:
+```
+Route::post('/store/employee/data', 
+    [EmployeesController::class, 'store']
+);
+```
+create CreateModal.jsx :
+```
+import axios from 'axios';
+import React, { Component } from 'react'
+import { toast } from 'react-toastify';
+
+export default class CreateModal extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            employeeName: null,
+            employeeSalary: null
+        }
+    }
+
+    // Create employee name state.
+
+    inputEmployeeName = (event) => {
+        this.setState({
+            employeeName: event.target.value,
+        });
+    }
+
+    // Create employee salary state.
+
+    inputEmployeeSalary = (event) => {
+        this.setState({
+            employeeSalary: event.target.value,
+        });
+    }
+
+    // Storing employee data.
+
+    storeEmployeeData = () => {
+        axios.post('/store/employee/data', {
+            employeeName: this.state.employeeName,
+            employeeSalary: this.state.employeeSalary,
+        }).then(() => {
+            toast.success("Employee Saved Successfully");
+
+            setTimeout(() => {
+                location.reload();
+            },2500)
+        })
+    }
+
+    render() {
+        return (
+            <>
+                <div className="row text-right mb-3 pb-3">
+                    <button className='btn btn-info text-right col-3 offset-md-9'
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalCreate"
+                    >
+                        Add New Employee
+                    </button>
+                </div>
+                <div className="modal fade" id={"modalCreate"} tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title" id="exampleModalLabel">Employee Details</h5>
+                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div className="modal-body">
+                                    <form className='form'>
+                                        <div className="form-group">
+                                            <input type="text" 
+                                                id="employeeName" 
+                                                className='form-control mb-3'
+                                                placeholder='Name here'
+                                                onChange={this.inputEmployeeName}
+                                            />
+                                        </div>
+                                        <div className="form-group">
+                                            <input type="text" 
+                                                id="employeeSalary" 
+                                                className='form-control mb-3'
+                                                placeholder='Salary here'
+                                                onChange={this.inputEmployeeSalary}
+                                            />
+                                        </div>
+                                    </form>
+                                </div>
+                                <div className="modal-footer">
+                                <input type="button" 
+                                    className='btn btn-primary'
+                                    value='Save'
+                                    onClick={this.storeEmployeeData}
+                                />
+                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </>
+        )
+    }
+}
+```
+create new store function in EmployeesController.php :
+```
+    /**
+     * Storing new employee.
+     */
+    public function store(Request $request) {
+        try {
+
+            $employeeId     = $request->get('employeeId');
+            $employeeName   = $request->get('employeeName');
+            $employeeSalary = $request->get('employeeSalary');
+            
+            Employee::create([
+                'employee_name' => $employeeName,
+                'salary'        => $employeeSalary
+            ]);
+
+            return response()->json([
+                'employee_name' => $employeeName,
+                'salary'        => $employeeSalary
+            ]);
+        }
+        catch(Exception $e) {
+            Log::error($e);
+        }
+    }
+```
+add className='form-control mb-3' in CreateModal.jsx & UpdateModal.jsx :
+```
+<div className="form-group">
+    <input type="text" 
+        id="employeeName" 
+        className='form-control mb-3'
+        value={this.state.employeeName ?? ""}
+        onChange={this.inputEmployeeName}
+    />
+</div>
+<div className="form-group">
+    <input type="text" 
+        id="employeeSalary" 
+        className='form-control mb-3'
+        value={this.state.employeeSalary ?? ""}
+        onChange={this.inputEmployeeSalary}
+    />
+</div>
+```
+add link js cdn to the bottom of app.blade.php body section (so the modal works):
+```
+    <!-- jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- bootstrap js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous"></script>
+
+</body>
+</html>
+```
+add CreateModal in table.jsx :
+```
+    render() {
+        return (
+            <div className="container">
+                <ToastContainer/>
+                <CreateModal/>
+                <div className="row justify-content-center">
+```
+
+output after clicking create button (it will be added to database) :
+
 ![](./img/api11.png)
 
 <!-- referenaces: (45:23/2:28:56) https://www.youtube.com/watch?v=svziC8BblM0&t=1255s&ab_channel=ZarxBiz-->
