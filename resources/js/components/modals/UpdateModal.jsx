@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { Component } from 'react'
 
 export default class UpdateModal extends Component {
@@ -24,13 +25,46 @@ export default class UpdateModal extends Component {
         });
     }
 
-    static getDrivedStateFromProps(props, current_state) {
+    /**
+     * 
+     * @param {*} props = props nilai yg dikirim dri tempat sebelumnya
+     * @param {*} current_state = state / variable terbaru pada constructor
+     * @returns 
+     */
+    static getDerivedStateFromProps(props, current_state) {
+        let employeeUpdate = {
+            employeeName: null,
+            employeeSalary: null,
+        }
 
+        // Updating data from input.
+        if(current_state.employeeName && (current_state.employeeName !== props.employeeData.currentEmployeeName)) {
+            return null;
+        }
+
+        // Updating data from props Below.
+        if(current_state.employeeName !== props.employeeData.currentEmployeeName || 
+            current_state.employeeName === props.employeeData.currentEmployeeName) {
+            employeeUpdate.employeeName = props.employeeData.currentEmployeeName;
+        }
+
+        if(current_state.employeeSalary !== props.employeeData.currentEmployeeSalary || 
+            current_state.employeeSalary === props.employeeData.currentEmployeeSalary) {
+            employeeUpdate.employeeSalary = props.employeeData.currentEmployeeSalary;
+        }
+
+        return employeeUpdate;
     }
-    
-    // update submit handler
-    updateEmployeeData = () => {
 
+    // updating employee data
+    updateEmployeeData = () => {
+        axios.post('/update/employee/data', {
+            employeeId: this.props.modalId,
+            employeeName: this.state.employeeName,
+            employeeSalary: this.state.employeeSalary
+        }).then((response) => {
+            location.reload();
+        })
     }
 
     render() {
