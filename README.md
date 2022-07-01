@@ -845,4 +845,7 @@ after yes button clicked it will be showing react toast then automaticaly reload
 
 ![](./img/api10.png)
 
+output create data :
+![](./img/api11.png)
+
 <!-- referenaces: (45:23/2:28:56) https://www.youtube.com/watch?v=svziC8BblM0&t=1255s&ab_channel=ZarxBiz-->
