@@ -639,6 +639,210 @@ output after clicking the save changes button (it will get the updated input dat
 
 ![](./img/api7.png)
 
+modify updateEmployeeData function in EmployeeController.php :
+```
+    /**
+     * Update Individual employee data.
+     */
+    public function updateEmployeeData(Request $request) {
+        try {
+            // dd($request->all());
+            // $employeeData = Employee::findOrFail($request->get('employeeId'));
+            // return response()->json($employeeData);
+            $employeeId     = $request->get('employeeId');
+            $employeeName   = $request->get('employeeName');
+            $employeeSalary = $request->get('employeeSalary');
 
+            Employee::where('id', $employeeId)->update([
+                'employee_name'   => $employeeName,
+                'employee_salary' => $employeeSalary
+            ]);
+
+            return response()->json([
+                'employee_name'   => $employeeName,
+                'employee_salary' => $employeeSalary
+            ]);
+        }
+        catch(Exception $e) {
+            Log::error($e);
+        }
+    }
+```
+output :
+
+![](./img/api8.png)
+
+
+modified updateEmployeeData function in UpdateModal.jsx :
+```
+    // updating employee data
+    updateEmployeeData = () => {
+        axios.post('/update/employee/data', {
+            employeeId: this.props.modalId,
+            employeeName: this.state.employeeName,
+            employeeSalary: this.state.employeeSalary
+        }).then((response) => {
+            console.log(response);
+            // location.reload();
+        })
+    }
+```
+source : https://www.npmjs.com/package/react-toastify
+
+install react-toastify :
+```
+npm install --save react-toastify
+```
+add ToastContainer to Table.jsx :
+```
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+class Table extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            employees: []
+        }
+    }
+
+    // Life cycle method
+    componentDidMount() {
+        // getEmployeeList require DOM nodes 
+        this.getEmployeeList();
+    }
+
+    // Get Employee List.
+    getEmployeeList = () => {
+        let self = this;
+        axios.get('/get/employee/list').then(function(response) {
+            // console.log(response.data);
+            self.setState({
+                employees: response.data
+            });
+        });
+    }
+
+    render() {
+        return (
+            <div className="container">
+                <ToastContainer/>
+                <div className="row justify-content-center">
+                    <div className="col-md-8 m-4">
+                        <div className="card">
+                            {/* <div className="card-header">EmployeeApp Component</div>
+                            <div className="card-body">I'm a EmployeeApp component!</div> */}
+                            <table className="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" width="100px">#</th>
+                                        <th scope="col" width="100px">Name</th>
+                                        <th scope="col" width="100px">Salary</th>
+                                        <th scope="col" width="100px">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {this.state.employees.map(function(x, i) {
+                                        return <TableRow key={i} data={x} />
+                                    })}
+                                </tbody>
+                            </table>               
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+}
+```
+add delete button in TableActionButtons.jsx :
+```
+        <button 
+          className="btn btn-danger" 
+          type="button"
+          data-bs-toggle="modal" 
+          data-bs-target={"#deleteModal" + this.props.eachRowId}
+          onClick={ () => {this.getEmployeeDetails(this.props.eachRowId)} }
+        >
+          Delete
+        </button>
+        <DeleteModal modalId={ this.props.eachRowId } employeeData={ this.state }/>
+```
+source : https://axios-http.com/docs/api_intro
+
+create DeleteModal.jsx :
+```
+import axios from 'axios';
+import React, { Component } from 'react'
+import { toast } from 'react-toastify';
+
+export default class DeleteModal extends Component {
+
+    constructor(props) {
+        super(props);
+    }
+
+    // Delete function for employee data.
+    deleteEmployeeData = (employee) => {
+        axios.delete('/delete/employee/data/' + employee).then(() => {
+            toast.error('Employee Deleted successfully');
+
+            setTimeout(() => {
+                location.reload();
+            }, 2500)
+        })
+    }
+
+    render() {
+        return (
+            <div className="modal fade" id={"deleteModal" + this.props.modalId} tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="exampleModalLabel">Employee Delete</h5>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body">
+                            Are you sure, You want to delete this Employee data
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" 
+                                className="btn btn-danger" 
+                                data-bs-dismiss="modal"
+                                onClick={ () => {this.deleteEmployeeData(this.props.modalId)}}
+                                >
+                                    Yes
+                            </button>
+                            <button type="button" 
+                                className="btn btn-secondary" 
+                                data-bs-dismiss="modal">
+                                    Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+}
+
+```
+
+add new route for delete in web.php :
+```
+Route::delete('/delete/employee/data/{employee}',
+    [EmployeesController::class, 'destroy']
+);
+```
+
+now delete by id button works :
+
+![](./img/api9.png)
+
+after yes button clicked it will be showing react toast then automaticaly reload the page with deleted data :
+
+![](./img/api10.png)
 
 <!-- referenaces: (45:23/2:28:56) https://www.youtube.com/watch?v=svziC8BblM0&t=1255s&ab_channel=ZarxBiz-->
