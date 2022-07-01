@@ -72,4 +72,29 @@ class EmployeesController extends Controller
             Log::error($e);
         }
     }
+
+    /**
+     * Storing new employee.
+     */
+    public function store(Request $request) {
+        try {
+
+            $employeeId     = $request->get('employeeId');
+            $employeeName   = $request->get('employeeName');
+            $employeeSalary = $request->get('employeeSalary');
+            
+            Employee::create([
+                'employee_name' => $employeeName,
+                'salary'        => $employeeSalary
+            ]);
+
+            return response()->json([
+                'employee_name' => $employeeName,
+                'salary'        => $employeeSalary
+            ]);
+        }
+        catch(Exception $e) {
+            Log::error($e);
+        }
+    }
 }
