@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import TableRow from './TableRow';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 class Table extends Component {
 
@@ -30,25 +32,30 @@ class Table extends Component {
 
     render() {
         return (
-            <div className="col-md-8 m-4">
-                <div className="card">
-                    {/* <div className="card-header">EmployeeApp Component</div>
-                    <div className="card-body">I'm a EmployeeApp component!</div> */}
-                    <table className="table">
-                        <thead>
-                            <tr>
-                                <th scope="col" width="100px">#</th>
-                                <th scope="col" width="100px">Name</th>
-                                <th scope="col" width="100px">Salary</th>
-                                <th scope="col" width="100px">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {this.state.employees.map(function(x, i) {
-                                return <TableRow key={i} data={x} />
-                            })}
-                        </tbody>
-                    </table>               
+            <div className="container">
+                <ToastContainer/>
+                <div className="row justify-content-center">
+                    <div className="col-md-8 m-4">
+                        <div className="card">
+                            {/* <div className="card-header">EmployeeApp Component</div>
+                            <div className="card-body">I'm a EmployeeApp component!</div> */}
+                            <table className="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" width="100px">#</th>
+                                        <th scope="col" width="100px">Name</th>
+                                        <th scope="col" width="100px">Salary</th>
+                                        <th scope="col" width="100px">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {this.state.employees.map(function(x, i) {
+                                        return <TableRow key={i} data={x} />
+                                    })}
+                                </tbody>
+                            </table>               
+                        </div>
+                    </div>
                 </div>
             </div>
         );
