@@ -14,7 +14,7 @@ make Employee model, factory, migrate, & seed :
 ```
 php artisan make:model Employee -mfs
 ```
-in the migration file : 
+in the Migration file : 
 ```
     public function up()
     {
