@@ -29,7 +29,7 @@ in the Migration file :
 ```
 php artisan migrate
 ```
-employee factory :
+Employee Factory :
 ```
 class EmployeeFactory extends Factory
 {
