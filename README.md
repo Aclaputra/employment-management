@@ -1,4 +1,4 @@
-first steps :
+First Steps :
 ```
 composer require laravel/ui
 
