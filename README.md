@@ -14,7 +14,7 @@ make Employee model, factory, migrate, & seed :
 ```
 php artisan make:model Employee -mfs
 ```
-in the Migration file : 
+In the Migration file : 
 ```
     public function up()
     {
@@ -47,7 +47,7 @@ class EmployeeFactory extends Factory
     }
 }
 ```
-employee seeder :
+Employee Seeder :
 ```
 use App\Models\Employee;
 
