@@ -10,7 +10,7 @@ php artisan ui:auth
 
 composer require barryvdh/laravel-debugbar
 ```
-make Employee model, factory, migrate, & seed :
+make Employee model, Factory, Migrate, & Seed :
 ```
 php artisan make:model Employee -mfs
 ```
