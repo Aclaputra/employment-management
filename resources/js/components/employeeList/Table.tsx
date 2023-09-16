@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import CreateModal from '../modals/CreateModal';
 
 class Table extends Component {
+    state: { employees: never[]; };
 
     constructor(props) {
         super(props);
@@ -16,7 +17,7 @@ class Table extends Component {
 
     // Life cycle method
     componentDidMount() {
-        // getEmployeeList require DOM nodes 
+        // getEmployeeList require DOM nodes
         this.getEmployeeList();
     }
 
@@ -55,7 +56,7 @@ class Table extends Component {
                                         return <TableRow key={i} data={x} />
                                     })}
                                 </tbody>
-                            </table>               
+                            </table>
                         </div>
                     </div>
                 </div>

@@ -1,5 +1,10 @@
 #employment-management
 
+- Laravel
+- React Typescript
+- Mysql
+- Bootstrap
+
 First Steps :
 ```
 composer require laravel/ui
